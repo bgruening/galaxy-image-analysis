@@ -29,6 +29,7 @@
             Enforced containerization to minimize potential security issues due to regex hacking.
         -->
         <container type="docker">quay.io/biocontainers/mulled-v2-6a2891161dcf5f35b38c6a49fff923163de7a66d:159a5b483a078f27b97a401b0626abac09e5f2d1-0</container>
+        <container type="singularity">https://depot.galaxyproject.org/singularity/mulled-v2-6a2891161dcf5f35b38c6a49fff923163de7a66d%3A159a5b483a078f27b97a401b0626abac09e5f2d1-0</container>
     </requirements>
     <command> 
     <![CDATA[
