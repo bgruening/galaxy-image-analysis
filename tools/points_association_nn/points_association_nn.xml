@@ -5,7 +5,6 @@
     </macros>
     <creator>
         <expand macro="creators/bmcv"/>
-        <expand macro="creators/kostrykin"/>
     </creator>
     <edam_operations>
         <edam_operation>operation_3443</edam_operation>
