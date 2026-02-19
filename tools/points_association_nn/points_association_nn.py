@@ -150,13 +150,20 @@ def points_linking(fn_in, output, nbpx=6, th=25, minlen=50):
         if maxv < th * br_max / 100 or maxv == 0:
             break
 
+    # write tracks to files
     for i in range(tracks_all.shape[0]):
+        track = tracks_all[i]
+
+        # remove empty rows
+        rows_to_remove = np.isnan(track[:, :3]).any(axis=1)
+        track = track[np.logical_not(rows_to_remove)]
+
         df = pd.DataFrame()
-        df['frame'] = tracks_all[i, :, 0].astype(int)
-        df['pos_x'] = tracks_all[i, :, 1].astype(int)
-        df['pos_y'] = tracks_all[i, :, 2].astype(int)
+        df['frame'] = track[:, 0].astype(int)
+        df['pos_x'] = track[:, 1].astype(int)
+        df['pos_y'] = track[:, 2].astype(int)
         if all_data.shape[1] == 4:
-            df['intensity'] = tracks_all[i, :, 3]
+            df['intensity'] = track[:, 3]
         df.to_csv(os.path.join(output, f'track{i + 1}.tsv'), sep='\t', lineterminator='\n', index=False)
 
 
