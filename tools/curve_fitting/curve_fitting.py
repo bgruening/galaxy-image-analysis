@@ -52,10 +52,10 @@ def curve_fitting(seq, degree=2, penalty='abs'):
 
 
 def curve_fitting_io(fn_in, fn_out, degree=2, penalty='abs', alpha=0.01):
-    df_in = pd.read_csv(fn_in, delimiter='\t')
-    df_in.columns = df_in.columns.str.strip()  # remove whitespaces from header names
-    data_all = [np.array(df_in)]
-    col_names = df_in.columns.tolist()
+    df = pd.read_csv(fn_in, delimiter='\t')
+    df.columns = df.columns.str.strip()  # remove whitespaces from header names
+    data_all = [np.array(df)]
+    col_names = df.columns.tolist()
     ncols_ori = len(col_names)
 
     # curve_fitting
@@ -77,12 +77,9 @@ def curve_fitting_io(fn_in, fn_out, degree=2, penalty='abs', alpha=0.01):
         data_all[0] = np.concatenate((data_all[0], seq_assist.reshape(-1, 1)), axis=1)
 
     # write to file
-    df = pd.DataFrame()
-    for c in range(ncols_ori):
-        df[col_names[c]] = data_all[0][:, c]
-    df['CURVE'] = data_all[0][:, ncols_ori]
+    df['curve'] = data_all[0][:, ncols_ori]
     if alpha > 0:
-        df['CURVE_A'] = data_all[0][:, ncols_ori + 1]
+        df['curve_a'] = data_all[0][:, ncols_ori + 1]
     df.to_csv(fn_out, sep='\t', lineterminator='\n', index=False)
 
 
