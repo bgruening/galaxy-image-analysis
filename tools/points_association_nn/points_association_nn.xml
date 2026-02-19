@@ -32,10 +32,10 @@
     ]]>
     </command>
     <inputs>
-        <param name="fn_in" type="data" format="tabular" label="Coordinates (and intensities) of input points (tsv tabular)" />
-        <param name="nbpx" type="integer" value="6" optional="true" min="1" max="30" label="Neighborhood size (in pixel) for associating points" />
-        <param name="thres" type="float" value="25" optional="true" min="0.0" max="99.9" label="Tracks with all intensities lower than certain percentage (%) of the global maximal intensity will be discarded" />
-        <param name="minlen" type="float" value="50" optional="true" min="1.0" max="100.0" label="Minimum length of tracks (% of sequence length)" />
+        <param name="fn_in" type="data" format="tsv,tabular" label="Coordinates (and intensities) of input points (tsv tabular)"/>
+        <param name="nbpx" type="integer" value="6" optional="true" min="1" max="30" label="Neighborhood size (in pixel) for nearest neighbor search"/>
+        <param name="thres" type="float" value="25" optional="true" min="0.0" max="99.9" label="Minimum relative track intensity" help="Tracks with all intensities lower than certain percentage (%) of the global maximal intensity will be discarded" />
+        <param name="minlen" type="float" value="50" optional="true" min="1.0" max="100.0" label="Minimum length of tracks (in % of the full sequence length)"/>
     </inputs>
     <outputs>
         <collection type="list" name="output" label="Tracks in ${on_string}">
@@ -56,9 +56,11 @@
         </test>
     </tests>
     <help>
-    **What it does**
 
-    This tool associates points in consecutive frames (slices) using the nearest neighbor algorithm.
+        **Performs linking in tabular lists of points from multi-frame time series.**
+
+        This tool associates points in consecutive frames using the nearest neighbor algorithm.
+
     </help>
     <citations>
         <citation type="doi">10.1097/j.pain.0000000000002642</citation>
