@@ -50,6 +50,7 @@ def find_nn(cim, icy, icx, nim, nbpx):
 
 def points_linking(fn_in, fn_out, nbpx=6, th=25, minlen=50):
     data = pd.read_csv(fn_in, delimiter="\t")
+    data = data[['frame', 'pos_x', 'pos_y', 'intensity']]
     all_data = np.array(data)
     assert all_data.shape[1] in [3, 4], 'unknow collum(s) in input data!'
 
