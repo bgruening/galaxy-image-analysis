@@ -52,53 +52,44 @@ def curve_fitting(seq, degree=2, penalty='abs'):
 
 
 def curve_fitting_io(fn_in, fn_out, degree=2, penalty='abs', alpha=0.01):
-    # read all sheets
-    xl = pd.ExcelFile(fn_in)
-    nSpots = len(xl.sheet_names)
-    data_all = []
-    for i in range(nSpots):
-        df = pd.read_excel(xl, xl.sheet_names[i])
-        data_all.append(np.array(df))
-    col_names = df.columns.tolist()
+    df_in = pd.read_csv(fn_in, delimiter='\t')
+    df_in.columns = df_in.columns.str.strip()  # remove whitespaces from header names
+    data_all = [np.array(df_in)]
+    col_names = df_in.columns.tolist()
     ncols_ori = len(col_names)
 
     # curve_fitting
     diff = np.array([], dtype=('float64'))
-    for i in range(nSpots):
-        seq = data_all[i][:, -1]
-        seq_fit = seq.copy()
-        idx_valid = ~np.isnan(seq)
-        seq_fit[idx_valid] = curve_fitting(seq[idx_valid], degree=degree, penalty=penalty)
-        data_all[i] = np.concatenate((data_all[i], seq_fit.reshape(-1, 1)), axis=1)
-        if alpha > 0:
-            diff = np.concatenate((diff, seq_fit[idx_valid] - seq[idx_valid]))
+    seq = data_all[0][:, col_names.index('intensity')]
+    seq_fit = seq.copy()
+    idx_valid = ~np.isnan(seq)
+    seq_fit[idx_valid] = curve_fitting(seq[idx_valid], degree=degree, penalty=penalty)
+    data_all[0] = np.concatenate((data_all[0], seq_fit.reshape(-1, 1)), axis=1)
+    if alpha > 0:
+        diff = np.concatenate((diff, seq_fit[idx_valid] - seq[idx_valid]))
 
     # add assistive curve
     if alpha > 0:
         sorted_diff = np.sort(diff)
         fac = 1 - alpha / 2
         sig3 = sorted_diff[int(diff.size * fac)]
-        for i in range(nSpots):
-            seq_assist = data_all[i][:, -1] + sig3
-            data_all[i] = np.concatenate((data_all[i], seq_assist.reshape(-1, 1)), axis=1)
+        seq_assist = data_all[0][:, -1] + sig3
+        data_all[0] = np.concatenate((data_all[0], seq_assist.reshape(-1, 1)), axis=1)
 
     # write to file
-    with pd.ExcelWriter(fn_out) as writer:
-        for i in range(nSpots):
-            df = pd.DataFrame()
-            for c in range(ncols_ori):
-                df[col_names[c]] = data_all[i][:, c]
-            df['CURVE'] = data_all[i][:, ncols_ori]
-            if alpha > 0:
-                df['CURVE_A'] = data_all[i][:, ncols_ori + 1]
-            df.to_excel(writer, sheet_name=xl.sheet_names[i], index=False, float_format='%.2f')
-        writer.save()
+    df = pd.DataFrame()
+    for c in range(ncols_ori):
+        df[col_names[c]] = data_all[0][:, c]
+    df['CURVE'] = data_all[0][:, ncols_ori]
+    if alpha > 0:
+        df['CURVE_A'] = data_all[0][:, ncols_ori + 1]
+    df.to_csv(fn_out, sep='\t', lineterminator='\n', index=False)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Fit (1st- or 2nd-degree) polynomial curves to data points")
-    parser.add_argument("fn_in", help="File name of input data points (xlsx)")
-    parser.add_argument("fn_out", help="File name of output fitted curves (xlsx)")
+    parser.add_argument("fn_in", help="File name of input data points (tsv)")
+    parser.add_argument("fn_out", help="File name of output fitted curves (tsv)")
     parser.add_argument("degree", type=int, help="Degree of the polynomial function")
     parser.add_argument("penalty", help="Optimization objective for fitting")
     parser.add_argument("alpha", type=float, help="Significance level for generating assistive curves")
