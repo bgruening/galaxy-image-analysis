@@ -1,4 +1,4 @@
-<tool id="ip_points_association_nn" name="Perform linking in time series (nearest neighbors)" version="0.0.3-2" profile="20.05"> 
+<tool id="ip_points_association_nn" name="Perform linking in time series (nearest neighbors)" version="0.0.4" profile="20.05"> 
     <description></description>
     <edam_operations>
         <edam_operation>operation_3443</edam_operation>
@@ -33,7 +33,7 @@
     </outputs>
     <tests>
         <test>
-            <param name="fn_in" value="spots_detected.tsv"/>
+            <param name="fn_in" value="input.tsv"/>
             <param name="nbpx" value="6"/>
             <param name="thres" value="25"/>
             <param name="minlen" value="50"/>
