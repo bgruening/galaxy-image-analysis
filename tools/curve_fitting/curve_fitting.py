@@ -8,6 +8,7 @@ See file LICENSE for detail or copy at https://opensource.org/licenses/MIT
 """
 
 import argparse
+import os
 
 import numpy as np
 import pandas as pd
@@ -51,44 +52,54 @@ def curve_fitting(seq, degree=2, penalty='abs'):
     return compute_curve(xx, result.x)
 
 
-def curve_fitting_io(fn_in, fn_out, degree=2, penalty='abs', alpha=0.01):
-    df = pd.read_csv(fn_in, delimiter='\t')
-    df.columns = df.columns.str.strip()  # remove whitespaces from header names
-    data_all = [np.array(df)]
+def curve_fitting_io(input_list, output, degree=2, penalty='abs', alpha=0.01):
+
+    # read all inputs
+    nSpots = len(input_list)
+    df_all, data_all = [], []
+    for i in range(nSpots):
+        df = pd.read_csv(input_list[i], delimiter='\t')
+        df.columns = df.columns.str.strip()  # remove whitespaces from header names
+        df_all.append(df)
+        data_all.append(np.array(df))
     col_names = df.columns.tolist()
     ncols_ori = len(col_names)
 
     # curve_fitting
     diff = np.array([], dtype=('float64'))
-    seq = data_all[0][:, col_names.index('intensity')]
-    seq_fit = seq.copy()
-    idx_valid = ~np.isnan(seq)
-    seq_fit[idx_valid] = curve_fitting(seq[idx_valid], degree=degree, penalty=penalty)
-    data_all[0] = np.concatenate((data_all[0], seq_fit.reshape(-1, 1)), axis=1)
-    if alpha > 0:
-        diff = np.concatenate((diff, seq_fit[idx_valid] - seq[idx_valid]))
+    for i in range(nSpots):
+        seq = data_all[i][:, col_names.index('intensity')]
+        seq_fit = seq.copy()
+        idx_valid = ~np.isnan(seq)
+        seq_fit[idx_valid] = curve_fitting(seq[idx_valid], degree=degree, penalty=penalty)
+        data_all[i] = np.concatenate((data_all[i], seq_fit.reshape(-1, 1)), axis=1)
+        if alpha > 0:
+            diff = np.concatenate((diff, seq_fit[idx_valid] - seq[idx_valid]))
 
     # add assistive curve
     if alpha > 0:
         sorted_diff = np.sort(diff)
         fac = 1 - alpha / 2
         sig3 = sorted_diff[int(diff.size * fac)]
-        seq_assist = data_all[0][:, -1] + sig3
-        data_all[0] = np.concatenate((data_all[0], seq_assist.reshape(-1, 1)), axis=1)
+        for i in range(nSpots):
+            seq_assist = data_all[i][:, -1] + sig3
+            data_all[i] = np.concatenate((data_all[i], seq_assist.reshape(-1, 1)), axis=1)
 
-    # write to file
-    df['curve'] = data_all[0][:, ncols_ori]
-    if alpha > 0:
-        df['curve_a'] = data_all[0][:, ncols_ori + 1]
-    df.to_csv(fn_out, sep='\t', lineterminator='\n', index=False)
+    # write to files
+    for i in range(nSpots):
+        df = df_all[i]
+        df['curve'] = data_all[i][:, ncols_ori]
+        if alpha > 0:
+            df['curve_a'] = data_all[i][:, ncols_ori + 1]
+        df.to_csv(os.path.join(output, f'curve{i + 1}.tsv'), sep='\t', lineterminator='\n', index=False)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Fit (1st- or 2nd-degree) polynomial curves to data points")
-    parser.add_argument("fn_in", help="File name of input data points (tsv)")
-    parser.add_argument("fn_out", help="File name of output fitted curves (tsv)")
+    parser.add_argument("--input", help="File name of input data points (tsv)", action='append', type=str, required=True)
+    parser.add_argument("output", help="Name of output directory")
     parser.add_argument("degree", type=int, help="Degree of the polynomial function")
     parser.add_argument("penalty", help="Optimization objective for fitting")
     parser.add_argument("alpha", type=float, help="Significance level for generating assistive curves")
     args = parser.parse_args()
-    curve_fitting_io(args.fn_in, args.fn_out, args.degree, args.penalty, args.alpha)
+    curve_fitting_io(args.input, args.output, args.degree, args.penalty, args.alpha)
