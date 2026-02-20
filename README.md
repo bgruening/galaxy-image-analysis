@@ -101,9 +101,10 @@ If Galaxy Image Analysis helped with the analysis of your data, please do not fo
 
 ## Acknowledgment
 
-This work has been funded by the BMFTR (Federal Ministry of Research, Technology and Space), Heidelberg Center for Human Bioinformatics (HD-HuB) within the German Network for Bioinformatics Infrastructure (de.NBI) & ELIXIR-DE, and LiBiS (Baden-Württemberg Institute for Bioinformatics Infrastructure).
+This work has been funded by the BMFTR (Federal Ministry of Research, Technology and Space), Heidelberg Center for Human Bioinformatics (HD-HuB), within the German Network for Bioinformatics Infrastructure (de.NBI) & ELIXIR-DE (W-de.NBI-016) and by the MWK (Baden-Württemberg Ministry of Science, Research and Arts) within LiBiS (Baden-Württemberg Institute for Bioinformatics Infrastructure).
 
 <img width="4198" height="371" alt="GIA Logos" src="https://github.com/user-attachments/assets/5724b1d7-d9ae-40c1-9c50-9d129d11d8de" />
+
 
 
 
