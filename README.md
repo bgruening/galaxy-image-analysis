@@ -94,11 +94,19 @@ If Galaxy Image Analysis helped with the analysis of your data, please do not fo
 
 ### Miscellaneous
 
+- [Aggregate readouts](https://usegalaxy.eu/?tool_id=toolshed.g2.bx.psu.edu/repos/imgteam/pycytominer_aggregate/pycytominer_aggregate) with Pycytominer
+- [Annotate readouts with metadata](https://usegalaxy.eu/?tool_id=toolshed.g2.bx.psu.edu/repos/imgteam/pycytominer_annotate/pycytominer_annotate) with Pycytominer
+- [Compute consensus profiles](https://usegalaxy.eu/?tool_id=toolshed.g2.bx.psu.edu/repos/imgteam/pycytominer_consensus/pycytominer_consensus) with Pycytominer
 - [Compute image features](https://usegalaxy.eu/root?tool_id=toolshed.g2.bx.psu.edu/repos/imgteam/mahotas_features/ip_mahotas_features) with Mahotas
 - [Extract top view](https://usegalaxy.eu/root?tool_id=toolshed.g2.bx.psu.edu/repos/imgteam/wsi_extract_top_view/ip_wsi_extract_top_view) with OpenSlide
+- [Normalize readouts](https://usegalaxy.eu/?tool_id=toolshed.g2.bx.psu.edu/repos/imgteam/pycytominer_normalize/pycytominer_normalize) with Pycytominer
+- [Parse value from image metadata](https://usegalaxy.eu/?tool_id=toolshed.g2.bx.psu.edu/repos/imgteam/parse_image_metadata/param_image_metadata)*
 - [Perform curve fitting](https://usegalaxy.eu/root?tool_id=toolshed.g2.bx.psu.edu/repos/imgteam/curve_fitting/ip_curve_fitting)
+- [Select informative features](https://usegalaxy.eu/?tool_id=toolshed.g2.bx.psu.edu/repos/imgteam/pycytominer_feature_select/pycytominer_feature_select) with Pycytominer
 - [Show image info](https://usegalaxy.eu/root?tool_id=toolshed.g2.bx.psu.edu/repos/imgteam/image_info/ip_imageinfo) with Bioformats
 - [Unzip](https://usegalaxy.eu/root?tool_id=toolshed.g2.bx.psu.edu/repos/imgteam/unzip/unzip)
+
+<sub>*) This is an expression tool. Expression tools are auxiliary tools that are only usable in workflows.</sub>
 
 ## Acknowledgment
 
