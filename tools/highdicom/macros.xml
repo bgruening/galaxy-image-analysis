@@ -1,6 +1,6 @@
 <macros>
     <token name="@TOOL_VERSION@">0.27.0</token>
-    <token name="@VERSION_SUFFIX@">0</token>
+    <token name="@VERSION_SUFFIX@">1</token>
     <xml name="description">
         <description>with highdicom</description>
     </xml>
