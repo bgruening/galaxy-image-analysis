@@ -13,6 +13,9 @@
     </edam_operations>
     <expand macro="xrefs"/>
     <expand macro="requirements"/>
+    <required_files>
+        <include type="literal" path="dicom2text.py"/>
+    </required_files>
     <command><![CDATA[
 
     python '$__tool_directory__/dicom2text.py'
